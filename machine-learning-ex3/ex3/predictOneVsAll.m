@@ -13,9 +13,17 @@ num_labels = size(all_theta, 1);
 
 % You need to return the following variables correctly 
 p = zeros(size(X, 1), 1);
-
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
+%p=sigmoid(all_theta*X')
+[maxval,p]= max(sigmoid(all_theta*X'),[],1);
+p=p';
+
+%p = max(sigmoid(all_theta*X')',[],2);
+%for i = 1:num_labels
+%  p = max(sigmoid(all_theta(i,:)*X')',[],2);
+%  disp(p);
+%endfor
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Complete the following code to make predictions using
