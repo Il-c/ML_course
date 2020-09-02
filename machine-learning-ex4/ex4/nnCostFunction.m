@@ -24,11 +24,48 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
 
 % Setup some useful variables
 m = size(X, 1);
-         
+disp(m)
+disp(size(Theta1))
+disp(size(Theta2))
 % You need to return the following variables correctly 
 J = 0;
+layer2= sigmoid(Theta1*[ones(m, 1) X]');
+layer2=layer2';
+layer2=[ones(m,1) layer2];
+y=repmat([1:num_labels],m,1)==repmat(y,1,num_labels);
+
+J = (1/m)*sum(sum(-y'.*log(sigmoid(Theta2*layer2'))-(1-y)'.*log(1-sigmoid(Theta2*layer2'))));
+
+J=J+(lambda/(2*m))*(sum(sum((Theta1(:,2:end)).^2))+sum(sum((Theta2(:,2:end)).^2)));
+
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
+
+D_2=0;
+D_1=0;
+
+input=[ones(m, 1) X];
+
+for t = 1:m
+  a_1=input(t,:);
+  z_2=a_1*Theta1';
+  a_2=sigmoid(z_2);
+  a_2=[1 a_2];
+  z_3=a_2*Theta2';
+  a_3=sigmoid(z_3);
+  
+  delta_3=a_3-y(t,:);
+  delta_2=Theta2'*delta_3'.*sigmoidGradient([1;Theta1*a_1']);
+  delta_2=delta_2(2:end);
+  
+  D_2 = D_2 +delta_3'*a_2;
+  D_1 = D_1 +delta_2*a_1;
+   
+endfor
+
+Theta1_grad = (1/m)*D_1+(lambda/m)*[zeros(size(Theta1,1),1) Theta1(:,2:end)];
+Theta2_grad = (1/m)*D_2+(lambda/m)*[zeros(size(Theta2,1),1) Theta2(:,2:end)];
+
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
@@ -61,31 +98,11 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 % -------------------------------------------------------------
 
 % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end

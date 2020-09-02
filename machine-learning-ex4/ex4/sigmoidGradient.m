@@ -7,6 +7,7 @@ function g = sigmoidGradient(z)
 %   the gradient for each element.
 
 g = zeros(size(z));
+g= (1./(1+e.^-z)).*(1-(1./(1+e.^-z)));
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the gradient of the sigmoid function evaluated at

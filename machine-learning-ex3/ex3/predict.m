@@ -15,6 +15,8 @@ layer2=layer2';
 layer2=[ones(m,1) layer2];
 [maxval,p]= max(sigmoid(Theta2*layer2'),[],1);
 
+%[maxval,p]= max(sigmoid(Theta2*sigmoid(Theta1*X')'),[],1);
+
 p=p';
 % ====================== YOUR CODE HERE ======================
 % Instructions: Complete the following code to make predictions using
